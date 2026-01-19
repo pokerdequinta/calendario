@@ -33,7 +33,6 @@
             background: linear-gradient(135deg, #1a3d1a 0%, #0f2a0f 100%);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid #d4a121;
         }
 
         .logo {
@@ -182,7 +181,7 @@
         .day.poker-day {
             background: linear-gradient(135deg, #d4a121 0%, #b8891c 100%);
             font-weight: bold;
-            font-size: 0.95em;
+            font-size: 1.4em;
             color: #0d1b0d;
             box-shadow: 0 3px 10px rgba(212, 161, 33, 0.6);
             animation: pulse 2s ease-in-out infinite;
@@ -192,10 +191,11 @@
         .day.poker-day::after {
             content: '♠';
             position: absolute;
-            font-size: 0.5em;
-            bottom: 1px;
-            right: 2px;
+            font-size: 0.9em;
+            bottom: 2px;
+            right: 3px;
             color: #0d1b0d;
+            font-weight: bold;
         }
 
         @keyframes pulse {
@@ -296,20 +296,17 @@
         <header>
             <img src="logo pdq.png" alt="Logo Poker de Quinta" class="logo">
             <h1>POKER DE QUINTA</h1>
-            <div class="subtitle">Temporada 2026</div>
+            <div class="subtitle">Temporada 2026 - Calendário</div>
         </header>
 
         <div class="export-section">
             <h2>📅 Adicionar ao Calendário</h2>
             <div class="export-buttons">
-                <button class="export-btn" onclick="exportToGoogleCalendar()">
-                    📆 Google Calendar
+                <button class="export-btn" onclick="exportAllToICS()">
+                    📲 Adicionar Todas as Etapas ao Meu Calendário
                 </button>
-                <button class="export-btn" onclick="exportToICS()">
-                    📲 Apple/Outlook (iCal)
-                </button>
-                <button class="export-btn" onclick="exportAllToGoogleCalendar()">
-                    🎯 Todas as Etapas (Google)
+                <button class="export-btn" onclick="showGoogleInstructions()">
+                    ℹ️ Instruções de Importação
                 </button>
             </div>
         </div>
@@ -436,52 +433,7 @@
             return dateStr.replace(/-/g, '');
         }
 
-        function exportToGoogleCalendar() {
-            const date = prompt('Digite a data da etapa (formato: 29/01, 26/02, etc):');
-            if (!date) return;
-            
-            const [day, month] = date.split('/');
-            const dateStr = `2026-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-            
-            if (!pokerDates[dateStr]) {
-                alert('Data inválida! Por favor, digite uma data de etapa válida.');
-                return;
-            }
-            
-            const title = `Poker de Quinta - ${pokerDates[dateStr]}`;
-            const startDate = formatDateForCalendar(dateStr);
-            const endDate = startDate;
-            const details = `Poker de Quinta - ${pokerDates[dateStr]}`;
-            
-            const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}&sf=true&output=xml`;
-            
-            window.open(url, '_blank');
-        }
-
-        function exportAllToGoogleCalendar() {
-            let allEvents = '';
-            let count = 0;
-            
-            for (const [date, etapa] of Object.entries(pokerDates)) {
-                const title = `Poker de Quinta - ${etapa}`;
-                const startDate = formatDateForCalendar(date);
-                
-                if (count === 0) {
-                    const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${startDate}&details=${encodeURIComponent(`Poker de Quinta - ${etapa}`)}&sf=true&output=xml`;
-                    window.open(url, '_blank');
-                } else {
-                    setTimeout(() => {
-                        const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${startDate}&details=${encodeURIComponent(`Poker de Quinta - ${etapa}`)}&sf=true&output=xml`;
-                        window.open(url, '_blank');
-                    }, count * 500);
-                }
-                count++;
-            }
-            
-            alert('Abrindo todas as etapas no Google Calendar. Permita pop-ups se necessário!');
-        }
-
-        function exportToICS() {
+        function exportAllToICS() {
             let icsContent = 'BEGIN:VCALENDAR\n';
             icsContent += 'VERSION:2.0\n';
             icsContent += 'PRODID:-//Poker de Quinta//Temporada 2026//PT\n';
@@ -491,7 +443,6 @@
             icsContent += 'X-WR-TIMEZONE:America/Sao_Paulo\n';
             
             for (const [date, etapa] of Object.entries(pokerDates)) {
-                const [year, month, day] = date.split('-');
                 const eventDate = formatDateForCalendar(date);
                 
                 icsContent += 'BEGIN:VEVENT\n';
@@ -499,6 +450,7 @@
                 icsContent += `DTEND;VALUE=DATE:${eventDate}\n`;
                 icsContent += `SUMMARY:Poker de Quinta - ${etapa}\n`;
                 icsContent += `DESCRIPTION:Poker de Quinta - ${etapa}\n`;
+                icsContent += `LOCATION:Poker de Quinta\n`;
                 icsContent += `UID:${date}-poker-quinta@pokerdequinta.com\n`;
                 icsContent += 'STATUS:CONFIRMED\n';
                 icsContent += 'SEQUENCE:0\n';
@@ -511,7 +463,65 @@
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
             link.download = 'poker-de-quinta-2026.ics';
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+            
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                setTimeout(() => {
+                    alert('✅ Arquivo baixado!\n\n📱 PRÓXIMO PASSO:\n\n• Abra o arquivo "poker-de-quinta-2026.ics" que foi baixado\n• Ele abrirá automaticamente no seu app de Calendário\n• Toque em "Adicionar Tudo" ou "Importar"\n• Pronto! Todas as 13 etapas estarão no seu calendário');
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    alert('✅ Arquivo baixado!\n\n💻 COMO IMPORTAR:\n\n📱 NO CELULAR:\n• Abra o arquivo baixado\n• Ele abrirá no app de Calendário\n• Toque em "Adicionar" ou "Importar"\n\n🖥️ NO COMPUTADOR (Google Calendar):\n1. Acesse calendar.google.com\n2. Clique em Configurações (⚙️)\n3. Clique em "Importar e exportar"\n4. Selecione o arquivo baixado\n5. Clique em "Importar"\n\n🍎 NO MAC/iPhone:\n• Clique duas vezes no arquivo\n• Ele abrirá no Calendário automaticamente');
+                }, 500);
+            }
+        }
+
+        function showGoogleInstructions() {
+            const instructions = `📆 INSTRUÇÕES DE IMPORTAÇÃO:
+
+🤖 ANDROID:
+1. Clique em "Adicionar Todas as Etapas"
+2. Abra o arquivo baixado
+3. Selecione "Google Calendar" ou "Calendário"
+4. Toque em "Importar" ou "Adicionar"
+5. Pronto! ✅
+
+🍎 iOS (iPhone/iPad):
+1. Clique em "Adicionar Todas as Etapas"
+2. Abra o arquivo baixado
+3. Toque em "Adicionar Tudo"
+4. Escolha qual calendário usar
+5. Pronto! ✅
+
+💻 COMPUTADOR (Google Calendar):
+1. Clique em "Adicionar Todas as Etapas"
+2. Acesse calendar.google.com
+3. Vá em Configurações (⚙️) → Importar e exportar
+4. Clique em "Selecionar arquivo do computador"
+5. Escolha o arquivo "poker-de-quinta-2026.ics"
+6. Clique em "Importar"
+7. Pronto! ✅
+
+📋 TODAS AS DATAS:
+29/01 - 1ª Etapa
+26/02 - 2ª Etapa  
+26/03 - 3ª Etapa
+30/04 - 4ª Etapa
+28/05 - 5ª Etapa
+25/06 - 6ª Etapa
+30/07 - 7ª Etapa
+27/08 - 8ª Etapa
+24/09 - 9ª Etapa
+08/10 - 10ª Etapa
+29/10 - 11ª Etapa
+26/11 - 12ª Etapa
+10/12 - ÚLTIMA ETAPA 🏆`;
+            
+            alert(instructions);
         }
 
         createCalendar();
