@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker de Quinta 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0d1b0d;
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #1a3d1a 0%, #0f2a0f 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #d4a121;
+        }
+
+        .logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 8px rgba(212, 161, 33, 0.5));
+        }
+
+        h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5em;
+            margin-bottom: 8px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            color: #d4a121;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.95;
+            color: #e0e0e0;
+            font-weight: 300;
+        }
+
+        .export-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a3d1a 0%, #0f2a0f 100%);
+            border: 2px solid #d4a121;
+            border-radius: 15px;
+        }
+
+        .export-section h2 {
+            font-family: 'Anton', sans-serif;
+            color: #d4a121;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #d4a121 0%, #b8891c 100%);
+            color: #0d1b0d;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 161, 33, 0.4);
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 161, 33, 0.6);
+        }
+
+        .export-btn:active {
+            transform: translateY(0);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .month-card {
+            background: linear-gradient(135deg, #1a3d1a 0%, #0f2a0f 100%);
+            border: 1px solid #2d5016;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .month-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+
+        .month-card.highlight {
+            background: linear-gradient(135deg, #2a4d2a 0%, #1a3d1a 100%);
+            border: 2px solid #d4a121;
+            box-shadow: 0 6px 20px rgba(212, 161, 33, 0.3);
+        }
+
+        .month-header {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #d4a121;
+            text-align: center;
+            color: #d4a121;
+            letter-spacing: 1px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .day-label {
+            text-align: center;
+            font-size: 0.7em;
+            opacity: 0.7;
+            padding: 4px;
+            font-weight: bold;
+            color: #d4a121;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+            cursor: default;
+            color: #e0e0e0;
+            font-size: 0.85em;
+        }
+
+        .day:hover {
+            background: rgba(212, 161, 33, 0.1);
+        }
+
+        .day.empty {
+            background: transparent;
+        }
+
+        .day.poker-day {
+            background: linear-gradient(135deg, #d4a121 0%, #b8891c 100%);
+            font-weight: bold;
+            font-size: 0.95em;
+            color: #0d1b0d;
+            box-shadow: 0 3px 10px rgba(212, 161, 33, 0.6);
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .day.poker-day::after {
+            content: '♠';
+            position: absolute;
+            font-size: 0.5em;
+            bottom: 1px;
+            right: 2px;
+            color: #0d1b0d;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 3px 10px rgba(212, 161, 33, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 4px 15px rgba(212, 161, 33, 0.8); }
+        }
+
+        .etapa-info {
+            margin-top: 8px;
+            padding: 8px;
+            background: linear-gradient(135deg, rgba(212, 161, 33, 0.2) 0%, rgba(184, 137, 28, 0.2) 100%);
+            border: 1px solid #d4a121;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.8em;
+            color: #d4a121;
+        }
+
+        .legend {
+            background: linear-gradient(135deg, #1a3d1a 0%, #0f2a0f 100%);
+            border: 2px solid #d4a121;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .legend h2 {
+            font-family: 'Anton', sans-serif;
+            margin-bottom: 15px;
+            color: #d4a121;
+            font-size: 1.8em;
+            letter-spacing: 1px;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(212, 161, 33, 0.1);
+            border-radius: 6px;
+            border: 1px solid #2d5016;
+            transition: all 0.2s ease;
+        }
+
+        .legend-item:hover {
+            background: rgba(212, 161, 33, 0.15);
+            border-color: #d4a121;
+        }
+
+        .legend-item .date {
+            font-weight: bold;
+            color: #d4a121;
+            min-width: 55px;
+            font-size: 0.95em;
+        }
+
+        .legend-item .etapa {
+            flex: 1;
+            color: #e0e0e0;
+            font-size: 0.95em;
+        }
+
+        .legend-item.final {
+            background: linear-gradient(135deg, rgba(212, 161, 33, 0.3) 0%, rgba(184, 137, 28, 0.3) 100%);
+            border: 2px solid #d4a121;
+            box-shadow: 0 4px 15px rgba(212, 161, 33, 0.3);
+        }
+
+        .legend-item.final .etapa {
+            color: #d4a121;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+            .export-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logo pdq.png" alt="Logo Poker de Quinta" class="logo">
+            <h1>POKER DE QUINTA</h1>
+            <div class="subtitle">Temporada 2026</div>
+        </header>
+
+        <div class="export-section">
+            <h2>📅 Adicionar ao Calendário</h2>
+            <div class="export-buttons">
+                <button class="export-btn" onclick="exportToGoogleCalendar()">
+                    📆 Google Calendar
+                </button>
+                <button class="export-btn" onclick="exportToICS()">
+                    📲 Apple/Outlook (iCal)
+                </button>
+                <button class="export-btn" onclick="exportAllToGoogleCalendar()">
+                    🎯 Todas as Etapas (Google)
+                </button>
+            </div>
+        </div>
+
+        <div class="calendar-grid" id="calendar"></div>
+
+        <div class="legend">
+            <h2>📅 DATAS DAS ETAPAS</h2>
+            <div class="legend-items">
+                <div class="legend-item"><span class="date">29/01</span><span class="etapa">1ª Etapa</span></div>
+                <div class="legend-item"><span class="date">26/02</span><span class="etapa">2ª Etapa</span></div>
+                <div class="legend-item"><span class="date">26/03</span><span class="etapa">3ª Etapa</span></div>
+                <div class="legend-item"><span class="date">30/04</span><span class="etapa">4ª Etapa</span></div>
+                <div class="legend-item"><span class="date">28/05</span><span class="etapa">5ª Etapa</span></div>
+                <div class="legend-item"><span class="date">25/06</span><span class="etapa">6ª Etapa</span></div>
+                <div class="legend-item"><span class="date">30/07</span><span class="etapa">7ª Etapa</span></div>
+                <div class="legend-item"><span class="date">27/08</span><span class="etapa">8ª Etapa</span></div>
+                <div class="legend-item"><span class="date">24/09</span><span class="etapa">9ª Etapa</span></div>
+                <div class="legend-item"><span class="date">08/10</span><span class="etapa">10ª Etapa</span></div>
+                <div class="legend-item"><span class="date">29/10</span><span class="etapa">11ª Etapa</span></div>
+                <div class="legend-item"><span class="date">26/11</span><span class="etapa">12ª Etapa</span></div>
+                <div class="legend-item final"><span class="date">10/12</span><span class="etapa">🏆 ÚLTIMA ETAPA 🏆</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pokerDates = {
+            '2026-01-29': '1ª Etapa',
+            '2026-02-26': '2ª Etapa',
+            '2026-03-26': '3ª Etapa',
+            '2026-04-30': '4ª Etapa',
+            '2026-05-28': '5ª Etapa',
+            '2026-06-25': '6ª Etapa',
+            '2026-07-30': '7ª Etapa',
+            '2026-08-27': '8ª Etapa',
+            '2026-09-24': '9ª Etapa',
+            '2026-10-08': '10ª Etapa',
+            '2026-10-29': '11ª Etapa',
+            '2026-11-26': '12ª Etapa',
+            '2026-12-10': 'ÚLTIMA ETAPA'
+        };
+
+        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                           'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const dayLabels = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+        function createCalendar() {
+            const calendar = document.getElementById('calendar');
+            
+            for (let month = 0; month < 12; month++) {
+                const firstDay = new Date(2026, month, 1);
+                const lastDay = new Date(2026, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDayOfWeek = firstDay.getDay();
+                
+                const monthCard = document.createElement('div');
+                monthCard.className = 'month-card';
+                
+                let hasPokerDay = false;
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = `2026-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    if (pokerDates[dateStr]) {
+                        hasPokerDay = true;
+                        break;
+                    }
+                }
+                if (hasPokerDay) monthCard.classList.add('highlight');
+                
+                const monthHeader = document.createElement('div');
+                monthHeader.className = 'month-header';
+                monthHeader.textContent = monthNames[month];
+                monthCard.appendChild(monthHeader);
+                
+                const daysGrid = document.createElement('div');
+                daysGrid.className = 'days-grid';
+                
+                dayLabels.forEach(label => {
+                    const dayLabel = document.createElement('div');
+                    dayLabel.className = 'day-label';
+                    dayLabel.textContent = label;
+                    daysGrid.appendChild(dayLabel);
+                });
+                
+                for (let i = 0; i < startingDayOfWeek; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'day empty';
+                    daysGrid.appendChild(emptyDay);
+                }
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'day';
+                    dayElement.textContent = day;
+                    
+                    const dateStr = `2026-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    if (pokerDates[dateStr]) {
+                        dayElement.classList.add('poker-day');
+                        dayElement.title = pokerDates[dateStr];
+                    }
+                    
+                    daysGrid.appendChild(dayElement);
+                }
+                
+                monthCard.appendChild(daysGrid);
+                
+                if (hasPokerDay) {
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const dateStr = `2026-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                        if (pokerDates[dateStr]) {
+                            const etapaInfo = document.createElement('div');
+                            etapaInfo.className = 'etapa-info';
+                            etapaInfo.textContent = `${day}/${String(month + 1).padStart(2, '0')} - ${pokerDates[dateStr]}`;
+                            monthCard.appendChild(etapaInfo);
+                        }
+                    }
+                }
+                
+                calendar.appendChild(monthCard);
+            }
+        }
+
+        function formatDateForCalendar(dateStr) {
+            return dateStr.replace(/-/g, '');
+        }
+
+        function exportToGoogleCalendar() {
+            const date = prompt('Digite a data da etapa (formato: 29/01, 26/02, etc):');
+            if (!date) return;
+            
+            const [day, month] = date.split('/');
+            const dateStr = `2026-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+            
+            if (!pokerDates[dateStr]) {
+                alert('Data inválida! Por favor, digite uma data de etapa válida.');
+                return;
+            }
+            
+            const title = `Poker de Quinta - ${pokerDates[dateStr]}`;
+            const startDate = formatDateForCalendar(dateStr);
+            const endDate = startDate;
+            const details = `Poker de Quinta - ${pokerDates[dateStr]}`;
+            
+            const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}&sf=true&output=xml`;
+            
+            window.open(url, '_blank');
+        }
+
+        function exportAllToGoogleCalendar() {
+            let allEvents = '';
+            let count = 0;
+            
+            for (const [date, etapa] of Object.entries(pokerDates)) {
+                const title = `Poker de Quinta - ${etapa}`;
+                const startDate = formatDateForCalendar(date);
+                
+                if (count === 0) {
+                    const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${startDate}&details=${encodeURIComponent(`Poker de Quinta - ${etapa}`)}&sf=true&output=xml`;
+                    window.open(url, '_blank');
+                } else {
+                    setTimeout(() => {
+                        const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${startDate}&details=${encodeURIComponent(`Poker de Quinta - ${etapa}`)}&sf=true&output=xml`;
+                        window.open(url, '_blank');
+                    }, count * 500);
+                }
+                count++;
+            }
+            
+            alert('Abrindo todas as etapas no Google Calendar. Permita pop-ups se necessário!');
+        }
+
+        function exportToICS() {
+            let icsContent = 'BEGIN:VCALENDAR\n';
+            icsContent += 'VERSION:2.0\n';
+            icsContent += 'PRODID:-//Poker de Quinta//Temporada 2026//PT\n';
+            icsContent += 'CALSCALE:GREGORIAN\n';
+            icsContent += 'METHOD:PUBLISH\n';
+            icsContent += 'X-WR-CALNAME:Poker de Quinta 2026\n';
+            icsContent += 'X-WR-TIMEZONE:America/Sao_Paulo\n';
+            
+            for (const [date, etapa] of Object.entries(pokerDates)) {
+                const [year, month, day] = date.split('-');
+                const eventDate = formatDateForCalendar(date);
+                
+                icsContent += 'BEGIN:VEVENT\n';
+                icsContent += `DTSTART;VALUE=DATE:${eventDate}\n`;
+                icsContent += `DTEND;VALUE=DATE:${eventDate}\n`;
+                icsContent += `SUMMARY:Poker de Quinta - ${etapa}\n`;
+                icsContent += `DESCRIPTION:Poker de Quinta - ${etapa}\n`;
+                icsContent += `UID:${date}-poker-quinta@pokerdequinta.com\n`;
+                icsContent += 'STATUS:CONFIRMED\n';
+                icsContent += 'SEQUENCE:0\n';
+                icsContent += 'END:VEVENT\n';
+            }
+            
+            icsContent += 'END:VCALENDAR';
+            
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'poker-de-quinta-2026.ics';
+            link.click();
+        }
+
+        createCalendar();
+    </script>
+</body>
+</html>
